@@ -40,3 +40,19 @@ export interface Brief {
   citations: Citation[];
   verificationResults: VerificationResult[];
 }
+
+// Re-export utility types for convenience
+export type { CitationSummary } from '../utils/citation';
+export type { FontSize, LineSpacing } from '../hooks/useReadingSettings';
+export type { LoadingState } from '../hooks/useBriefLoader';
+
+// Re-export component props types
+export type {
+  BriefContentProps,
+  BriefViewerProps,
+  CitationButtonProps,
+  DetailPanelProps,
+  ReadingControlsProps,
+  HeaderProps,
+  HeaderStatusProps,
+} from './components';

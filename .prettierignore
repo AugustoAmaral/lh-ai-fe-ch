@@ -1,0 +1,17 @@
+# dependencies
+node_modules
+
+# production
+dist
+build
+
+# misc
+.DS_Store
+*.log
+
+# config files
+package-lock.json
+tsconfig.json
+vite.config.ts
+tailwind.config.js
+postcss.config.js

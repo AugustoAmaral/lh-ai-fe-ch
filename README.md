@@ -129,37 +129,52 @@ Good luck. We're excited to see what you build.
 
 # Design Rationale
 
-## General
+## Context
 
-### First iteration:
+The challenge was to transform a functional but unpolished citation verification interface into a product lawyers would trust. The target users are legal professionals who need to review documents while verifying citation accuracy under time pressure.
 
-I transformed the citation verification interface from a basic functional prototype into a polished, professional application that users would trust. The redesign focuses on clarity, accessibility, and a simple, functional user experience, primarily targeting lawyers who work with legal documents.
+## Key Design Decisions
 
-I used all the already-installed packages and made minimal changes to the project structure, focusing mainly on the visual and usability aspects.
+### Custom Markdown Rendering
 
-An important point to consider: I changed the right drawer to only appear when a citation is selected. This is because the user's primary focus is reading the document, not verifying citations—so the drawer only appears when the user wants more information about a specific citation. However, this might not be ideal; users might want to keep the drawer open to check citations while reading. This is a decision that could be revisited based on user feedback.
+I implemented a custom Markdown renderer instead of using react-markdown. Citation markers ([[CITATION:n]]) must become interactive buttons that trigger a detail drawer, not just styled text. Achieving this with a library would require custom plugins or post-processing the rendered output, adding complexity without clear benefit. 
 
-### Key changes:
+The custom solution supports all Markdown features present in the sample brief (headings, lists, blockquotes, emphasis, horizontal rules) while keeping citation interactivity straightforward.
 
-- Color choice:
-  
-  I used Tailwind's Slate palette to convey professionalism and seriousness, avoiding overly vibrant colors that could distract or seem inappropriate for a legal context. The semantic colors (green for verified citations, yellow for warnings, red for critical issues) were chosen to be easily recognizable, accessible, and consistent with what was already predefined.
-- Spacing and typography: 
-  
-  I adopted a comfortable max-width for reading, with generous spacing between lines and elements to make dense text easier to read. Instead of using a Markdown rendering library, I implemented basic rendering to preserve the legal document's structure, ensuring that the hierarchy of sections and arguments remained simple and clear.
-- Layout architecture: 
-  
-  There were some more structural changes here. I added a fixed header to provide constant context and facilitate navigation, while the document content scrolls. The detail panel slides in from the right only when a citation is selected, allowing users to focus on reading before seeking more information—this prioritizes focus and provides more spacing. The entire design was built to be responsive and work well across different screen sizes, including specific behaviors for mobile devices, such as the detail panel taking full width and the app name disappearing when there isn't enough space.
-- Accessibility: 
-  
-  I used semantic HTML, button elements for citations (allowing users to navigate between citations using Tab and open them with Enter), descriptive ARIA labels, visible keyboard focus styles, and sufficient color contrast to ensure the app is accessible to all users. I also added hover effects on buttons and smooth transitions to improve the user experience.
+### Conditional Detail Drawer
 
-### Second iteration:
+The original implementation showed the citation panel permanently. I changed it to appear only when a citation is selected. My reasoning: the primary task is reading the document; verification is secondary. A persistent panel competes for attention and reduces reading space, especially on smaller screens. However, this assumption should be validated, some users may prefer keeping the panel open while reading.
 
-This iteration focused more on user experience than visual design. Now I'm using a markdown library to simplify the code logic, added a bottom toolbar with controls for users to adjust font size, line spacing, toggle dark mode and scroll to the top. I also implemented the Escape key to close the side panel, as planned in the first iteration, and added loading, error, and empty states for the citation summary in the header.
+### Reading-Focused Toolbar
 
-At this point, the code has become too messy to maintain without better organization, I already struggled with it during this iteration. The next iteration will be dedicated specifically to refactoring: extracting presentational components from stateful ones, creating reusable hooks, and improving overall code readability and maintainability.
+I added a fixed bottom toolbar with font size, line spacing, dark mode toggle, and scroll-to-top controls. Legal documents are dense; giving users control over typography might reduce eye strain during extended reading sessions. Dark mode specifically addresses lawyers working late hours.
 
-### Next iteration:
+### URL-Based Reading Position
 
-- Component refactoring for improved readability and maintainability across the entire codebase
+I implemented Intersection Observers to update the URL hash as citations scroll into view. This creates a "reading memory"; refreshing or sharing the link returns users to their last position. For lengthy documents, this prevents the frustration of losing your place.
+
+### Visual Language
+
+I chose Tailwind's Slate palette for professionalism and neutrality. Legal contexts demand seriousness; vibrant colors would feel inappropriate. Semantic colors (red for critical, amber for warnings, green for valid) follow established conventions for immediate recognition.
+
+### Accessibility
+
+Citations use <button> elements enabling keyboard navigation (Tab between citations, Enter to open, Esc to leave). All interactive elements have visible focus states, ARIA labels, and sufficient color contrast.
+
+### Trade-offs & Limitations
+
+#### Not implemented due to time constraints:
+
+Automated tests (prioritized demonstrating functionality over test coverage)
+Extended Markdown features beyond the sample document's needs
+Performance optimization for very large documents
+Robust state management solution
+
+#### Assumptions requiring validation:
+
+The conditional drawer behavior needs user feedback
+Intersection Observer logic is simplified and may need refinement for edge cases
+
+#### Future Improvements
+
+With more time, I would add comprehensive test coverage, implement proper state management, create a Storybook for component documentation, optimize rendering performance for large documents, and conduct accessibility audits with screen readers.

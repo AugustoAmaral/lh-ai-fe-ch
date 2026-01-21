@@ -1,7 +1,13 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo } from "react";
+import {
+  FONT_SIZE_CLASSES,
+  LINE_SPACING_CLASSES,
+  FONT_SIZE_LABELS,
+  LINE_SPACING_LABELS,
+} from "../utils";
 
-export type FontSize = 'small' | 'medium' | 'large';
-export type LineSpacing = 'compact' | 'normal' | 'relaxed';
+export type FontSize = "small" | "medium" | "large";
+export type LineSpacing = "compact" | "normal" | "relaxed";
 
 export interface ReadingSettings {
   fontSize: FontSize;
@@ -23,7 +29,8 @@ export interface ReadingSettingsClasses {
   lineSpacingClass: string;
 }
 
-export interface UseReadingSettingsReturn extends ReadingSettings, ReadingSettingsActions {
+export interface UseReadingSettingsReturn
+  extends ReadingSettings, ReadingSettingsActions {
   classes: ReadingSettingsClasses;
   labels: {
     fontSize: string;
@@ -31,68 +38,44 @@ export interface UseReadingSettingsReturn extends ReadingSettings, ReadingSettin
   };
 }
 
-const FONT_SIZE_CLASSES: Record<FontSize, string> = {
-  small: 'text-sm',
-  medium: 'text-base',
-  large: 'text-lg',
-};
-
-const LINE_SPACING_CLASSES: Record<LineSpacing, string> = {
-  compact: 'leading-snug',
-  normal: 'leading-relaxed',
-  relaxed: 'leading-loose',
-};
-
-const FONT_SIZE_LABELS: Record<FontSize, string> = {
-  small: 'S',
-  medium: 'M',
-  large: 'L',
-};
-
-const LINE_SPACING_LABELS: Record<LineSpacing, string> = {
-  compact: 'Compact',
-  normal: 'Normal',
-  relaxed: 'Relaxed',
-};
-
 export function useReadingSettings(): UseReadingSettingsReturn {
   const [fontSize, setFontSizeState] = useState<FontSize>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('fontSize');
-      return (saved as FontSize) || 'medium';
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("fontSize");
+      return (saved as FontSize) || "medium";
     }
-    return 'medium';
+    return "medium";
   });
 
   const [lineSpacing, setLineSpacingState] = useState<LineSpacing>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('lineSpacing');
-      return (saved as LineSpacing) || 'normal';
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("lineSpacing");
+      return (saved as LineSpacing) || "normal";
     }
-    return 'normal';
+    return "normal";
   });
 
   const [isDarkMode, setIsDarkModeState] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('darkMode');
-      if (saved !== null) return saved === 'true';
-      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("darkMode");
+      if (saved !== null) return saved === "true";
+      return window.matchMedia("(prefers-color-scheme: dark)").matches;
     }
     return false;
   });
 
   // Persist to localStorage
   useEffect(() => {
-    localStorage.setItem('fontSize', fontSize);
+    localStorage.setItem("fontSize", fontSize);
   }, [fontSize]);
 
   useEffect(() => {
-    localStorage.setItem('lineSpacing', lineSpacing);
+    localStorage.setItem("lineSpacing", lineSpacing);
   }, [lineSpacing]);
 
   useEffect(() => {
-    document.documentElement.classList.toggle('dark', isDarkMode);
-    localStorage.setItem('darkMode', String(isDarkMode));
+    document.documentElement.classList.toggle("dark", isDarkMode);
+    localStorage.setItem("darkMode", String(isDarkMode));
   }, [isDarkMode]);
 
   // Setters
@@ -111,17 +94,17 @@ export function useReadingSettings(): UseReadingSettingsReturn {
   // Cyclers
   const cycleFontSize = useCallback(() => {
     setFontSizeState((prev) => {
-      if (prev === 'small') return 'medium';
-      if (prev === 'medium') return 'large';
-      return 'small';
+      if (prev === "small") return "medium";
+      if (prev === "medium") return "large";
+      return "small";
     });
   }, []);
 
   const cycleLineSpacing = useCallback(() => {
     setLineSpacingState((prev) => {
-      if (prev === 'compact') return 'normal';
-      if (prev === 'normal') return 'relaxed';
-      return 'compact';
+      if (prev === "compact") return "normal";
+      if (prev === "normal") return "relaxed";
+      return "compact";
     });
   }, []);
 
@@ -130,16 +113,22 @@ export function useReadingSettings(): UseReadingSettingsReturn {
   }, []);
 
   // CSS classes based on settings
-  const classes = useMemo<ReadingSettingsClasses>(() => ({
-    fontSizeClass: FONT_SIZE_CLASSES[fontSize],
-    lineSpacingClass: LINE_SPACING_CLASSES[lineSpacing],
-  }), [fontSize, lineSpacing]);
+  const classes = useMemo<ReadingSettingsClasses>(
+    () => ({
+      fontSizeClass: FONT_SIZE_CLASSES[fontSize],
+      lineSpacingClass: LINE_SPACING_CLASSES[lineSpacing],
+    }),
+    [fontSize, lineSpacing],
+  );
 
   // Labels for UI
-  const labels = useMemo(() => ({
-    fontSize: FONT_SIZE_LABELS[fontSize],
-    lineSpacing: LINE_SPACING_LABELS[lineSpacing],
-  }), [fontSize, lineSpacing]);
+  const labels = useMemo(
+    () => ({
+      fontSize: FONT_SIZE_LABELS[fontSize],
+      lineSpacing: LINE_SPACING_LABELS[lineSpacing],
+    }),
+    [fontSize, lineSpacing],
+  );
 
   return {
     fontSize,
