@@ -76,14 +76,14 @@ What did you add that we didn't ask for? Keyboard shortcuts? A mini-map? Filteri
 
 The starter includes a fictional motion to dismiss with 6 citations. The brief content is **markdown-formatted** with headings, lists, blockquotes, and emphasis. Citation markers appear as `[[CITATION:n]]` in the text—you'll need to handle rendering markdown while replacing these markers with clickable citation elements.
 
-| Citation | Status | Severity |
-|----------|--------|----------|
-| Bell Atlantic Corp. v. Twombly | Valid | None |
-| Ashcroft v. Iqbal | Quote Mismatch | Warning |
-| Henderson v. United States Dep't of Justice | Not Found | Critical |
-| Dura Pharmaceuticals, Inc. v. Broudo | Valid | None |
-| Basic Inc. v. Levinson | Overruled | Warning |
-| Tellabs, Inc. v. Makor Issues & Rights | Valid | None |
+| Citation                                    | Status         | Severity |
+| ------------------------------------------- | -------------- | -------- |
+| Bell Atlantic Corp. v. Twombly              | Valid          | None     |
+| Ashcroft v. Iqbal                           | Quote Mismatch | Warning  |
+| Henderson v. United States Dep't of Justice | Not Found      | Critical |
+| Dura Pharmaceuticals, Inc. v. Broudo        | Valid          | None     |
+| Basic Inc. v. Levinson                      | Overruled      | Warning  |
+| Tellabs, Inc. v. Makor Issues & Rights      | Valid          | None     |
 
 ## Deliverables
 
@@ -124,4 +124,38 @@ src/
 Reply to the challenge email—we're happy to clarify anything.
 
 Good luck. We're excited to see what you build.
-# lh-ai-fe-ch
+
+---
+
+# Design Rationale
+
+## General
+
+### First iteration:
+I transformed the citation verification interface from a basic functional prototype into a polished, professional application that users would trust. The redesign focuses on clarity, accessibility, and a simple, functional user experience, primarily targeting lawyers who work with legal documents.
+
+I used all the already-installed packages and made minimal changes to the project structure, focusing mainly on the visual and usability aspects.
+
+An important point to consider: I changed the right drawer to only appear when a citation is selected. This is because the user's primary focus is reading the document, not verifying citations—so the drawer only appears when the user wants more information about a specific citation. However, this might not be ideal; users might want to keep the drawer open to check citations while reading. This is a decision that could be revisited based on user feedback.
+
+### Key changes:
+
+- Color choice:
+  
+  I used Tailwind's Slate palette to convey professionalism and seriousness, avoiding overly vibrant colors that could distract or seem inappropriate for a legal context. The semantic colors (green for verified citations, yellow for warnings, red for critical issues) were chosen to be easily recognizable, accessible, and consistent with what was already predefined.
+- Spacing and typography: 
+  
+  I adopted a comfortable max-width for reading, with generous spacing between lines and elements to make dense text easier to read. Instead of using a Markdown rendering library, I implemented basic rendering to preserve the legal document's structure, ensuring that the hierarchy of sections and arguments remained simple and clear.
+- Layout architecture: 
+  
+  There were some more structural changes here. I added a fixed header to provide constant context and facilitate navigation, while the document content scrolls. The detail panel slides in from the right only when a citation is selected, allowing users to focus on reading before seeking more information—this prioritizes focus and provides more spacing. The entire design was built to be responsive and work well across different screen sizes, including specific behaviors for mobile devices, such as the detail panel taking full width and the app name disappearing when there isn't enough space.
+- Accessibility: 
+  
+  I used semantic HTML, button elements for citations (allowing users to navigate between citations using Tab and open them with Enter), descriptive ARIA labels, visible keyboard focus styles, and sufficient color contrast to ensure the app is accessible to all users. I also added hover effects on buttons and smooth transitions to improve the user experience.
+
+### Next iteration:
+
+- Handle edge cases such as empty states, loading states, and error handling
+- Implement a Markdown library to improve content rendering
+- Add intersection observers and update the URL for each citation as the user scrolls (handling edge cases)
+- Allow users to close the detail panel by pressing Escape
