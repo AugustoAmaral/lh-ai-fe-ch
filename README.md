@@ -132,6 +132,7 @@ Good luck. We're excited to see what you build.
 ## General
 
 ### First iteration:
+
 I transformed the citation verification interface from a basic functional prototype into a polished, professional application that users would trust. The redesign focuses on clarity, accessibility, and a simple, functional user experience, primarily targeting lawyers who work with legal documents.
 
 I used all the already-installed packages and made minimal changes to the project structure, focusing mainly on the visual and usability aspects.
@@ -153,9 +154,12 @@ An important point to consider: I changed the right drawer to only appear when a
   
   I used semantic HTML, button elements for citations (allowing users to navigate between citations using Tab and open them with Enter), descriptive ARIA labels, visible keyboard focus styles, and sufficient color contrast to ensure the app is accessible to all users. I also added hover effects on buttons and smooth transitions to improve the user experience.
 
+### Second iteration:
+
+This iteration focused more on user experience than visual design. Now I'm using a markdown library to simplify the code logic, added a bottom toolbar with controls for users to adjust font size, line spacing, toggle dark mode and scroll to the top. I also implemented the Escape key to close the side panel, as planned in the first iteration, and added loading, error, and empty states for the citation summary in the header.
+
+At this point, the code has become too messy to maintain without better organization, I already struggled with it during this iteration. The next iteration will be dedicated specifically to refactoring: extracting presentational components from stateful ones, creating reusable hooks, and improving overall code readability and maintainability.
+
 ### Next iteration:
 
-- Handle edge cases such as empty states, loading states, and error handling
-- Implement a Markdown library to improve content rendering
-- Add intersection observers and update the URL for each citation as the user scrolls (handling edge cases)
-- Allow users to close the detail panel by pressing Escape
+- Component refactoring for improved readability and maintainability across the entire codebase
